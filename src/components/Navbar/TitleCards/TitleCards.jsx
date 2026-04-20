@@ -79,7 +79,7 @@ const TitleCards = ({ title, category, items, errorText }) => {
 
     return (
         <div className="title-cards">
-            <h2>{title || "Popular on Netflix"}</h2>
+            <h2>{title || "Popular Right Now"}</h2>
             <div className="card-list" ref={cardsRef}>
                 {cardItems.map((card) => (
                     <div className="card" key={card.id}>

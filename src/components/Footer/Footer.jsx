@@ -31,7 +31,7 @@ const Footer = () => {
                 <i>Contact Us</i>
             </ul>
             <p className='copyright-text'>
-                &copy; 2026 Netflix Clone made by Nathalie Benitah. All rights reserved.
+                &copy; 2026 Streaming UI Demo by Nathalie Benitah. All rights reserved.
             </p>
         
         </div>

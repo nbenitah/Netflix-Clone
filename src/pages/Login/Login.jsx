@@ -1,9 +1,8 @@
 import React from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import "./Login.css";
-import logo from "../../assets/logo.png";
 import { auth, login, signup } from "../../firebase";
-import netflix_spinner from "../../assets/netflix_spinner.gif";
+
 const Login = () => {
 const navigate = useNavigate();
 const [searchParams] = useSearchParams();
@@ -72,8 +71,8 @@ const user_auth=async(event)=>{
 
     return (
         <div className="login">
-            <Link to="/">
-                <img src={logo} className="login-logo" alt="Streaming Demo" />
+            <Link to="/" className="login-brand">
+                STREAM DEMO
             </Link>
 
             <div className="login-form">

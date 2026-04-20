@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 
 import "./Navbar.css";
-import logo from "../../assets/logo.png";
 import avatar from "../../assets/profile_img.png";
 import bell_icon from "../../assets/bell_icon.svg";
 import profile_img from "../../assets/profile_img.png";
@@ -50,8 +49,8 @@ const Navbar = () => {
     return (
         <div className="navbar" ref={navref}>
             <div className="navbar-left">
-                <Link to="/">
-                    <img src={logo} alt="Streaming Demo Logo" className="navbar-logo" />
+                <Link to="/" className="navbar-brand-link">
+                    <span className="navbar-brand-mark">STREAM DEMO</span>
                 </Link>
                 <ul>
                     <li>Home</li>

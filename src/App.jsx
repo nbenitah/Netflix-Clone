@@ -36,7 +36,7 @@ const App = () => {
   return (
     <div>
       <div className="site-disclaimer">
-        Educational demo project. Not affiliated with or endorsed by Netflix.
+        Educational streaming UI demo. Not affiliated with any real streaming provider.
       </div>
       <ToastContainer theme="dark" />
       <Routes>

@@ -7,8 +7,16 @@
     position: relative;
 }
 
-.login-logo {
-    width: 150px;
+.login-brand {
+    display: inline-block;
+    padding: 8px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    border-radius: 4px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1px;
 }
 
 .login-form {
@@ -108,8 +116,8 @@
         padding: 20px;
     }
 
-    .login-logo {
-        width: 120px;
+    .login-brand {
+        font-size: 13px;
     }
 
     .login-form {
