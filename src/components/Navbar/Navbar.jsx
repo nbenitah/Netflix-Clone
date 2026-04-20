@@ -51,7 +51,7 @@ const Navbar = () => {
         <div className="navbar" ref={navref}>
             <div className="navbar-left">
                 <Link to="/">
-                    <img src={logo} alt="Netflix Logo" className="navbar-logo" />
+                    <img src={logo} alt="Streaming Demo Logo" className="navbar-logo" />
                 </Link>
                 <ul>
                     <li>Home</li>
@@ -77,7 +77,7 @@ const Navbar = () => {
                             <img src={profile_img} alt="User Avatar" className="profile-icon" />
                             <img src={caret_icon} alt="User Avatar" className="dropdown-icon" />
                             <div className="dropdown-menu">
-                                <p onClick={handleLogout}>Sign Out of Netflix</p>
+                                <p onClick={handleLogout}>Sign Out of Demo</p>
                             </div>
                         </div>
                     </>

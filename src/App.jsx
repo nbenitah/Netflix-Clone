@@ -35,6 +35,9 @@ const App = () => {
 
   return (
     <div>
+      <div className="site-disclaimer">
+        Educational demo project. Not affiliated with or endorsed by Netflix.
+      </div>
       <ToastContainer theme="dark" />
       <Routes>
         <Route path="/" element={<Home />} />

@@ -27,6 +27,16 @@
     font-weight: 600;
 }
 
+.login-disclaimer {
+    margin-bottom: 16px;
+    padding: 10px 12px;
+    border: 1px solid #ffd54a;
+    border-radius: 4px;
+    background: rgba(255, 213, 74, 0.12);
+    color: #ffe082;
+    font-size: 13px;
+}
+
 .login-form form {
     display: flex;
     flex-direction: column;

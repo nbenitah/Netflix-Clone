@@ -73,10 +73,13 @@ const user_auth=async(event)=>{
     return (
         <div className="login">
             <Link to="/">
-                <img src={logo} className="login-logo" alt="Netflix" />
+                <img src={logo} className="login-logo" alt="Streaming Demo" />
             </Link>
 
             <div className="login-form">
+                <p className="login-disclaimer">
+                    Demo only. Do not use real personal, financial, or production credentials.
+                </p>
                 <h1>{signState}</h1>
                 <form onSubmit={user_auth}>
                 {signState === "Sign Up" ?
@@ -93,7 +96,7 @@ const user_auth=async(event)=>{
                         <p>Need help?</p>
                     </div>
                     <div className="form-switch">
-                        {signState === "Sign In" ? <p>New to Netflix? <span onClick={() => { setSignState("Sign Up"); setErrorMessage(""); }}>Sign Up Now.</span></p> : <></>}
+                        {signState === "Sign In" ? <p>New to this demo? <span onClick={() => { setSignState("Sign Up"); setErrorMessage(""); }}>Create Demo Account.</span></p> : <></>}
                         {signState === "Sign Up" ? <p>Already have an account? <span onClick={() => { setSignState("Sign In"); setErrorMessage(""); }}>Sign In Now</span></p> : <></>}
                         
                     </div>
