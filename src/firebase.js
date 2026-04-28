@@ -26,12 +26,17 @@ const signup=async(name, email, password)=>{
        const res = await createUserWithEmailAndPassword(auth, email,
          password);
          const user = res.user;
-         await addDoc(collection(db, "users"), {
-            uid: user.uid,
-            name,
-            authProvider: "local",
-            email,
-         });
+            try {
+                await addDoc(collection(db, "users"), {
+                    uid: user.uid,
+                    name,
+                    authProvider: "local",
+                    email,
+                });
+            } catch (profileError) {
+                // Firestore permissions or setup issues should not block account creation.
+                console.warn("User created, but profile document was not saved:", profileError);
+            }
 
          return user;
 

@@ -10,9 +10,10 @@
 .hero-caption{
     position: absolute;
     z-index: 2;
-    width: 100%;
+    width: min(92%, 760px);
     padding-left: 6%;
-    bottom: 0;
+    top: 14%;
+    bottom: auto;
 
 }
 .caption-img
@@ -29,7 +30,7 @@
 .hero-btns{
     display: flex;
     gap: 10px;
-    margin-bottom: 50px;
+    margin-bottom: 18px;
 }
 .hero-btns .btn img{
     width: 25px;
@@ -58,16 +59,56 @@
 .hero-btns .btn.dark-btn:hover{
     background: #6d6d6e66;
 }
+.featured-info-card{
+    width: min(100%, 620px);
+    margin-bottom: 18px;
+    padding: 16px 18px;
+    border-radius: 12px;
+    background: rgba(12, 12, 12, 0.74);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+}
+
+.featured-info-meta,
+.featured-info-summary{
+    margin: 0;
+}
+
+.featured-info-meta{
+    color: #f1f1f1;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.featured-info-summary{
+    color: #e2e2e2;
+    font-size: 15px;
+    line-height: 1.6;
+}
 .home-content{
     padding: 0 6% 50px;
-    margin-top: 30px;
+    margin-top: -88px;
+    position: relative;
+    z-index: 3;
 }
 .search-panel{
     display: flex;
     flex-direction: column;
     gap: 10px;
     max-width: 420px;
-    margin-bottom: 20px;
+    margin-top: 0;
+    margin-bottom: 14px;
+}
+.hero-search-results .title-cards{
+    margin-top: 6px;
+    margin-bottom: 10px;
+}
+
+.hero-search-results .title-cards h2{
+    margin-bottom: 6px;
 }
 .search-label{
     color: #e5e5e5;
@@ -97,6 +138,21 @@
     margin-bottom: 50px;
 }
 
+@media (max-width: 1366px) and (min-width: 901px){
+    .banner-img{
+        max-height: 78vh;
+        object-fit: cover;
+    }
+
+    .hero-caption{
+        top: 10%;
+    }
+
+    .home-content{
+        margin-top: -140px;
+    }
+}
+
 @media (max-width: 900px){
     .hero-caption{
         position: static;
@@ -105,6 +161,24 @@
 
     .home-content{
         margin-top: 0;
+    }
+
+    .hero-btns{
+        margin-bottom: 14px;
+    }
+
+    .search-panel{
+        max-width: 100%;
+        margin-bottom: 18px;
+    }
+
+    .featured-info-card{
+        width: 100%;
+        padding: 14px 16px;
+    }
+
+    .hero-search-results .title-cards{
+        margin-top: 8px;
     }
 
     .banner-img{

@@ -62,6 +62,16 @@ const user_auth=async(event)=>{
             return;
         }
 
+        if (error.code === "auth/unauthorized-domain") {
+            setErrorMessage("This app domain is not authorized in Firebase Auth settings.");
+            return;
+        }
+
+        if (error.code === "auth/operation-not-allowed") {
+            setErrorMessage("Email/password sign-in is disabled in Firebase Authentication.");
+            return;
+        }
+
         setErrorMessage("Unable to continue right now. Please try again.");
     } finally {
         setIsSubmitting(false);

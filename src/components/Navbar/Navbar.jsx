@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 
 import "./Navbar.css";
@@ -11,8 +11,23 @@ import { auth, logout } from "../../firebase";
 
 const Navbar = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const navref = React.useRef();
     const [isAuthenticated, setIsAuthenticated] = useState(!!auth.currentUser);
+
+    const handleBrandClick = (event) => {
+        event.preventDefault();
+
+        if (location.pathname !== "/") {
+            navigate("/");
+            window.setTimeout(() => {
+                window.scrollTo({ top: 0, behavior: "auto" });
+            }, 0);
+            return;
+        }
+
+        window.scrollTo({ top: 0, behavior: "auto" });
+    };
 
     const handleLogout = async () => {
         try {
@@ -49,16 +64,16 @@ const Navbar = () => {
     return (
         <div className="navbar" ref={navref}>
             <div className="navbar-left">
-                <Link to="/" className="navbar-brand-link">
+                <Link to="/" className="navbar-brand-link" onClick={handleBrandClick}>
                     <span className="navbar-brand-mark">STREAM DEMO</span>
                 </Link>
                 <ul>
-                    <li>Home</li>
-                    <li>TV Shows</li>
-                    <li>Movies</li>
-                    <li>New & Popular</li>
-                    <li>My List</li>
-                    <li>Browse by Languages</li>
+                    <li><Link to="/#top">Home</Link></li>
+                    <li><Link to="/#tv-shows">TV Shows</Link></li>
+                    <li><Link to="/#movies">Movies</Link></li>
+                    <li><Link to="/#new-popular">New & Popular</Link></li>
+                    <li><Link to="/#my-list">My List</Link></li>
+                    <li><Link to="/#browse-languages">Browse by Languages</Link></li>
                 </ul>
             </div>
             <div className="navbar-right">
@@ -70,7 +85,7 @@ const Navbar = () => {
                 ) : (
                     <>
                         <img src={avatar} alt="User Avatar" className="navbar-avatar" />
-                        <p>Children</p>
+                        <Link to="/#kids-family" className="children-link">Children</Link>
                         <img src={bell_icon} alt="Notifications" className="navbar-icon" />
                         <div className="navbar-profile">
                             <img src={profile_img} alt="User Avatar" className="profile-icon" />

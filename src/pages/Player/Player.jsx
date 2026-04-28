@@ -1,20 +1,33 @@
 import React, { useEffect, useState } from "react";
 import "./Player.css";
 import backArrowIcon from "../../assets/back_arrow_icon.png";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 const Player = () => {
-    const { id } = useParams();
+    const { id, mediaType } = useParams();
+    const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const [apiData, setApiData] = useState({
         name: "",
         key: "",
         published_at: "",
-        type: ""
+        type: "",
     });
     const [videoOptions, setVideoOptions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+
+    const normalizedMediaType = mediaType === "tv" ? "tv" : "movie";
+    const requestedLanguage = (searchParams.get("lang") || "").trim().toLowerCase();
+    const preferredLanguage = /^[a-z]{2}$/.test(requestedLanguage) ? requestedLanguage : "";
+    const languageLocaleMap = {
+        ko: "ko-KR",
+        hi: "hi-IN",
+        fr: "fr-FR",
+        es: "es-ES",
+        en: "en-US",
+    };
+    const apiLanguage = languageLocaleMap[preferredLanguage] || "en-US";
 
     const getEmbedUrl = (video) => {
         if (!video?.key || !video?.site) {
@@ -32,9 +45,9 @@ const Player = () => {
         return "";
     };
 
-    const getWatchUrl = (video, movieId) => {
+    const getWatchUrl = (video, mediaId) => {
         if (!video?.site || !video?.key) {
-            return `https://www.themoviedb.org/movie/${movieId}/videos`;
+            return `https://www.themoviedb.org/${normalizedMediaType}/${mediaId}/videos`;
         }
 
         if (video.site === "YouTube") {
@@ -45,15 +58,45 @@ const Player = () => {
             return `https://vimeo.com/${video.key}`;
         }
 
-        return `https://www.themoviedb.org/movie/${movieId}/videos`;
+        return `https://www.themoviedb.org/${normalizedMediaType}/${mediaId}/videos`;
     };
 
-
+    const selectBestVideo = (videos) => {
+        return (
+            videos.find(
+                (video) =>
+                    video.site === "YouTube" &&
+                    video.type === "Trailer" &&
+                    video.official
+            ) ||
+            videos.find(
+                (video) => video.site === "YouTube" && video.type === "Trailer"
+            ) ||
+            videos.find(
+                (video) => video.site === "YouTube" && video.type === "Teaser"
+            ) ||
+            videos.find(
+                (video) =>
+                    video.site === "Vimeo" &&
+                    video.type === "Trailer" &&
+                    video.official
+            ) ||
+            videos.find(
+                (video) => video.site === "Vimeo" && video.type === "Trailer"
+            ) ||
+            videos.find(
+                (video) => video.site === "Vimeo" && video.type === "Teaser"
+            ) ||
+            videos[0] ||
+            null
+        );
+    };
 
     useEffect(() => {
         if (!id) {
             return;
         }
+
         const options = {
             method: "GET",
             headers: {
@@ -66,7 +109,10 @@ const Player = () => {
         setLoading(true);
         setError("");
 
-        fetch(`https://api.themoviedb.org/3/movie/${id}/videos?language=en-US`, options)
+        fetch(
+            `https://api.themoviedb.org/3/${normalizedMediaType}/${id}/videos?language=${encodeURIComponent(apiLanguage)}`,
+            options
+        )
             .then((res) => res.json())
             .then((res) => {
                 const videos = Array.isArray(res.results) ? res.results : [];
@@ -76,33 +122,13 @@ const Player = () => {
                         (video.site === "YouTube" || video.site === "Vimeo")
                 );
 
-                const trailer =
-                    playableOptions.find(
-                        (video) =>
-                            video.site === "YouTube" &&
-                            video.type === "Trailer" &&
-                            video.official
-                    ) ||
-                    playableOptions.find(
-                        (video) => video.site === "YouTube" && video.type === "Trailer"
-                    ) ||
-                    playableOptions.find(
-                        (video) => video.site === "YouTube" && video.type === "Teaser"
-                    ) ||
-                    playableOptions.find(
-                        (video) =>
-                            video.site === "Vimeo" &&
-                            video.type === "Trailer" &&
-                            video.official
-                    ) ||
-                    playableOptions.find(
-                        (video) => video.site === "Vimeo" && video.type === "Trailer"
-                    ) ||
-                    playableOptions.find(
-                        (video) => video.site === "Vimeo" && video.type === "Teaser"
-                    ) ||
-                    playableOptions[0] ||
-                    null;
+                const prioritizedOptions = preferredLanguage
+                    ? playableOptions.filter(
+                        (video) => (video.iso_639_1 || "").toLowerCase() === preferredLanguage
+                    )
+                    : playableOptions;
+
+                const trailer = selectBestVideo(prioritizedOptions);
 
                 if (!trailer) {
                     setVideoOptions([]);
@@ -112,11 +138,15 @@ const Player = () => {
                         published_at: "",
                         type: "",
                     });
-                    setError("No trailer is available for this movie.");
+                    setError(
+                        preferredLanguage
+                            ? `No ${preferredLanguage.toUpperCase()} trailer is available for this ${normalizedMediaType}.`
+                            : `No trailer is available for this ${normalizedMediaType}.`
+                    );
                     return;
                 }
 
-                setVideoOptions(playableOptions.slice(0, 6));
+                setVideoOptions(prioritizedOptions.slice(0, 6));
                 setApiData(trailer);
             })
             .catch((err) => {
@@ -127,9 +157,7 @@ const Player = () => {
             .finally(() => {
                 setLoading(false);
             });
-    }, [id]);
-
-
+    }, [id, normalizedMediaType, preferredLanguage, apiLanguage]);
 
     return (
         <div className="player">
@@ -139,8 +167,9 @@ const Player = () => {
             {!loading && !error && apiData.key && getEmbedUrl(apiData) && (
                 <>
                     <iframe
-                        width="90%"
-                        height="90%"
+                        className="player-frame"
+                        width="72%"
+                        height="62%"
                         src={getEmbedUrl(apiData)}
                         title="YouTube video player"
                         frameBorder="0"
@@ -162,15 +191,16 @@ const Player = () => {
                 </a>
             )}
             {!loading && !error && !apiData.key && (
-                <a href={`https://www.themoviedb.org/movie/${id}/videos`} target="_blank" rel="noreferrer">
-                    Open movie videos on TMDB
+                <a href={`https://www.themoviedb.org/${normalizedMediaType}/${id}/videos`} target="_blank" rel="noreferrer">
+                    Open {normalizedMediaType} videos on TMDB
                 </a>
             )}
             {!loading && !error && videoOptions.length > 1 && (
-                <div>
-                    <p>Try another clip:</p>
+                <div className="clip-options">
+                    <p className="clip-options-title">Try another clip:</p>
                     {videoOptions.map((video) => (
                         <button
+                            className="clip-option-btn"
                             key={video.id}
                             type="button"
                             onClick={() => setApiData(video)}
@@ -181,9 +211,9 @@ const Player = () => {
                 </div>
             )}
             <div className="player-info">
-                <p>{apiData.published_at ? apiData.published_at.slice(0, 10) : ""}</p>
-                <p>{apiData.name || ""}</p>
-                <p>{apiData.type || ""}</p>
+                <p className="player-info-date">{apiData.published_at ? apiData.published_at.slice(0, 10) : ""}</p>
+                <p className="player-info-title">{apiData.name || ""}</p>
+                <p className="player-info-type">{apiData.type || ""}</p>
             </div>
         </div>
     );
